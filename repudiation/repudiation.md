@@ -17,5 +17,13 @@ The example demonstrates a vulnerability that can lead to repudiation by malicio
 ## For you to do
 
 1. Briefly explain the vulnerability.
+
+In **insecure.ts** the user is allowed to send messages with no logging of when they were sent. If a certain message causes an issue, it is hard to trace exactly which one did it as we could never find the message that was appended right before the issue.
+
 2. Briefly explain why the vulnerability is addressed in __secure.ts__.
+
+**secure.ts** incorporates logging of the time stamps of each action on the server, allowing us to trace the cause of certain issues by looking at the events that happened right before them.
+
 3. Which design pattern is used in the secure version to address the vulnerability? Briefly explain how it works?
+
+The pubsub pattern as the logs are writtne to a file stream. The file stream contains subscribers which react to write events by writing to to the file, and the handlers publish write events (which are log messages). 

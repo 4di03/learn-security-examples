@@ -31,5 +31,13 @@ This will create a database in MongoDB called __infodisclosure__. Verify its pre
 Answer the following:
 
 1. Briefly explain the potential vulnerabilities in **insecure.ts**
+
+**insecure.ts** exposes a GET endpoint to fetch user data; however, the username paremeter accepts mongodb query parameters , which may allow attackers to execute mongodb queries to expose user data without actually knowing the usernames. This is an information disclosure vulernabilty as it allows attackers to expose private information without having proper credentials
+
 2. Briefly explain how a malicious attacker can exploit them.
+
+An attacker might input a mongo query such as {$ne : ''} in to the query parameter as done in the above request in order to find any user with a non-empty username, allowing them to see private account information of an account which they have no ownership of.
+
 3. Briefly explain the defensive techniques used in **secure.ts** to prevent the information disclosure vulnerability?
+
+**secure.ts** prevents the attacker from injecting mongodb queries into the username parameter by first checking that the input has type string and then it replaces non alphanumeric characters with empty strings. This prevents attackers from injecting queries that relay on brackets, colons, or other special characters into the query, only allowing them to view a users information if they know the username.
